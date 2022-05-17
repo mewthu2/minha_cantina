@@ -30,7 +30,11 @@ gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.0"
 
+# Devise is a flexible authentication solution for Rails based on Warden.
 gem 'devise'
+
+# A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+gem 'rubocop-rails'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
