@@ -1,0 +1,29 @@
+<div class="page-header">
+  <h4><%= t('views.users.form.poles') %> <small class="text-muted"> <%= t('views.users.form.for_user') %></small></h4>
+</div>
+<% if user.poles.any? %>
+  <div class="card">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="120">ID</th>
+          <th width="120">UID</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% user.poles.each do |pole| %>
+          <tr>
+            <td width="120"><%= pole.id %></td>
+            <td width="120"><%= pole.uid %></td>
+            <td><%= pole.initials_with_name_and_kind %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-warning">
+    <%= t('views.users.form.no_pole_for_user') %>
+  </div>
+<% end %>

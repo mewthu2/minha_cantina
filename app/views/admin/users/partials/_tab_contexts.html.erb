@@ -1,0 +1,30 @@
+<% if user.contexts.any? %>
+  <table class="table" id="table-contexts">
+    <thead>
+      <tr>
+        <th width="30">ID</th>
+        <th width="30">UID</th>
+        <th><%= t('views.commoms.description')%></th>
+        <th class="text-center"><%= t('views.commoms.created_at')%></th>
+        <th class="text-center"><%= t('views.buttons.delete')%></th>
+      </tr>
+   </thead>
+  <tbody>
+      <% user.contexts.each do |context| %>
+        <tr>
+          <td width="30"><%= context.id %></td>
+          <td width="30"><%= context.uid %></td>
+          <td width="400"><%= context.description.truncate(80, omission: '...') %></td>
+          <td width="100" class="text-center"><%= context.created_at.strftime('%d/%m/%Y')%></td>
+          <td width="120" class="text-center"><%= link_to admin_user_delete_context_path(user,context_id: context.id), class: 'btn btn-danger',method: :delete, id: 'btn-modal-context', data: { confirm: t('views.users.form.delete_context_confirm') } do %>
+            <i class ="fa fa-trash" style="cursor: pointer;" data-toggle="tooltip" data-title="<%= t('views.users.form.delete_context') %>"></i></td>
+        </tr>
+      <% end %>
+      <% end %>
+  <% else %>
+    <div class="alert alert-warning">
+      <%= t('views.users.form.no_context_for_user') %>
+   	</div>
+<% end %>
+  </tbody>
+  </table>

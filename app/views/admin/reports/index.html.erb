@@ -1,0 +1,19 @@
+<%= render 'admin/layouts/partials/messages' %>
+
+<div class="card mb-lg advanced-search-form" id="questions-filters">
+  <%= form_tag do %>
+    <div class="card-body">
+      <div class="row">
+        <div col-12>
+          <%= label_tag :questionnaire_period_id %>
+          <%= select_tag :questionnaire_period_id, options_for_select(@questionnaire_periods.map{|qp| ["#{qp.questionnaire.title} - #{qp.id}", qp.id, data: { url: courses_admin_reports_path(qp.id) }]}, params[:questionnaire_period_id]), remote: true, class: 'form-control chosen-select' %>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <%= button_tag class: 'btn btn-success', name: '' do %><i class="fa fa-search"></i> <%= t('views.buttons.search') %><% end %>
+    </div>
+  <% end %>
+</div>
+
+<div id="courses"></div>

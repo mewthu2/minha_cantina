@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h4><%= t('views.users.form.data')%> <small class="text-muted"> <%= t('views.users.form.info')%></small></h4>
+</div>
+<div class="row">
+  <%= form.label :active, class: 'col-2 col-form-label text-right' %>
+  <div class="col-10">
+    <%= form.switch_box :active, class: 'el-switch-green mt-sm' %>
+  </div>
+</div>
+<div class="row">
+  <%= form.label :uid, class: 'col-2 col-form-label text-right required' %>
+  <div class="col-1">
+    <%= form.text_field :uid, class: 'form-control', maxlength: 255 %>
+  </div>
+</div>
+<div class="row">
+  <%= form.label :name, class: 'col-2 col-form-label text-right required' %>
+  <div class="col-10">
+    <%= form.text_field :name, class: 'form-control', maxlength: 255 %>
+  </div>
+</div>
+<div class="row">
+  <%= form.label :email, class: 'col-2 col-form-label text-right required' %>
+  <div class="col-10">
+    <%= form.text_field :email, class: 'form-control', maxlength: 255 %>
+  </div>
+</div>
+<div class="row">
+  <%= form.label :login, class: 'col-2 col-form-label text-right required' %>
+  <div class="col-6 col-md-5 col-lg-4">
+    <%= form.text_field :login, class: 'form-control', maxlength: 25 %>
+  </div>
+</div>
+<div class="row">
+  <%= form.label :password, class: 'col-2 col-form-label text-right required' %>
+  <div class="col-6 col-md-5 col-lg-4">
+    <%= form.text_field :password, class: 'form-control', maxlength: 25 %>
+  </div>
+</div>
+<div class="page-header mt-xl">
+  <h4><%= t('views.users.form.profile_acess')%> <small class="text-muted"> <%= t('views.users.form.profile_resources')%></small></h4>
+</div>
+<%= form.fields_for :user_profile do |user_profile_form| %>
+  <% user_profile_form.object.profile %>
+  <div class="row">
+    <%= user_profile_form.label t('views.users.form.profile'), class: 'col-2 col-form-label text-right' %>
+    <div class="col-6 col-md-5 col-lg-4">
+      <%= user_profile_form.collection_select :profile_id, @profiles, :id, :description, { include_blank: true }, class: 'form-control' %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+$("#div-modal").html("<%= j render partial: 'admin/users/partials/modal_contexts', locals: { new_contexts_for_the_user: @new_contexts_for_the_user, user: @user } %>");
+$('#contexts-modal').modal('show');

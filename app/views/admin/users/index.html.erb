@@ -1,0 +1,61 @@
+<% title t('views.users.index.id') %>
+
+<%= render 'admin/layouts/partials/messages' %>
+
+<div class="alert alert-warning">
+  <strong><%= t('views.responses.attention') %></strong> <%= t('views.responses.attention_message') %>
+</div>
+
+<div class="row">
+  <div class="col-4 col-md-6 col-lg-7 col-xl-8">
+    <% if can? :create, User %><%= link_to new_admin_user_path, class: 'btn btn-labeled btn-primary' do %><span class="btn-label"><i class="fa fa-plus"></i></span> <%= t('views.buttons.new') %> <% end %><% end %>
+  </div>
+  <div class="col-8 col-md-6 col-lg-5 col-xl-4">
+    <%= form_tag(admin_users_path, method: 'get', id: 'users-default-search-form') do %>
+      <div class="input-group">
+        <%= text_field_tag :s, params[:s], class: 'form-control', placeholder: t('views.buttons.search_id'), autofocus: true %>
+        <div class="input-group-append btn-group with-border">
+          <%= button_tag class: 'btn btn-success', name: '' do %><i class="fa fa-search"></i><% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <table class="table table-striped table-hover" id="usuarios-table" data-toggle="tableify">
+    <thead>
+      <tr>
+        <th width="20" class="text-center"><i class="fa fa-ellipsis-v"></i></th>
+        <th width="50" class="text-center"><%= User.human_attribute_name :active %></th>
+        <th width="100"><%= User.human_attribute_name :login %></th>
+        <th><%= User.human_attribute_name :name %></th>
+        <th><%= User.human_attribute_name :email %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.each do |user| %>
+        <tr>
+          <td width="50" class="tableify-actions">
+            <% if cannot?(:update, User) || can?(:read, User && user.uid.present?) %><%= link_to admin_user_path(user), class: 'tableify-default-action' do %><i class="fa fa-eye"></i> <%= t('views.buttons.view') %><% end %><% end %>
+            <% if !user.uid.present? %>
+              <% if can? :update, User %><%= link_to edit_admin_user_path(user), class: 'tableify-default-action', data: { modal: true } do %><i class="fa fa-pencil"></i> <%= t('views.buttons.edit')%><% end %><% end %>
+              <% if can? :destroy, User %><%= link_to admin_user_path(user), method: :delete, data: { confirm: t('views.buttons.confirm_delete') } do %><i class="fa fa-trash"></i> <%= t('views.buttons.delete') %><% end %><% end %>
+            <% end -%>
+          </td>
+          <td width="40" class="text-center"><%= user.active? %></td>
+          <td><%= user.decorate.login %></td>
+          <td><%= user.name %></td>
+          <td><%= user.email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="5"><%= page_entries_info @users %></th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<%= will_paginate @users, list_classes: %w[pagination justify-content-center mt-lg], inner_window: 1 %>

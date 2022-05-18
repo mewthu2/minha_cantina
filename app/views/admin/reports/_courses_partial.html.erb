@@ -1,0 +1,28 @@
+<div class="row">
+  <div col-12>
+    <%= label_tag :course_id %>
+    <%= select_tag :course_id, options_for_select(@courses.map{|c| [ c.course, c.course, data: { url: general_data_admin_reports_path(@questionnaire_period.id, course: c.course) }]}, params[:course]), remote: true, include_blank: 'Todos', class: 'form-control chosen-select' %>
+  </div>
+</div>
+
+<div id="general_data"></div>
+
+<script type="text/javascript">
+  var CoursesPartial = {
+    initialize: function() {
+      $("#course_id").change(function(i, element){
+        loading.show();
+        if ($("#course_id").val() == "") {
+          var url = '<%= general_data_admin_reports_path(@questionnaire_period.id) %>';
+        } else {
+          var url = $(this).children(':selected').data('url');
+        }
+        $.get(url).always(function(response){
+          loading.hide()
+        });
+      });
+      $("#course_id").trigger('change');
+    }
+  };
+  CoursesPartial.initialize();
+</script>

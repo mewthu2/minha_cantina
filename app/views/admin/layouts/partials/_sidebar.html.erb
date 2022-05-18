@@ -1,0 +1,61 @@
+<aside class="left-menu">
+  <div class="aside-inner">
+    <nav class="sidebar">
+      <div class="sidebar-search">
+        <%= form_tag 'javascript:void(0)', method: 'get', id: 'form-sidebar-search' do%>
+          <div class="input-group search">
+            <div class="input-group-prepend">
+              <%= button_tag class: 'btn btn-primary' do %><i class="fa fa-search"></i><% end %>
+            </div>
+            <%= text_field_tag :search_menu_item, '', class: 'form-control', placeholder: 'Pesquisar', autocomplete: 'off' %>
+          </div>
+        <% end %>
+      </div>
+      <ul class="nav" id="left-menu-accordion">
+        <li class="nav-heading">
+          <%= link_to admin_root_path do %><%= fa_icon "tachometer" %> Dashboard <% end %>
+        </li> 
+         <% if can?(:read, User) %>
+          <li class="nav-heading">
+            <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-administracao" aria-expanded="false">
+              <%= fa_icon "gear" %> Administração <i class="fa fa-angle-down arrow"></i>
+            </span>
+            <ul class="collapse collapsed" id="collapse-menu-administracao">
+              <% if can? :read, User %><li><%= link_to admin_users_path do %><em class="fa fa-caret-right"></em> <span>Usuários</span><% end %></li><% end %>
+            </ul>
+          </li>
+        <% end %>
+        <% if can?(:read, Question) || can?(:read, Questionnaire) || can?(:read, Dimension) %>
+          <li class="nav-heading">
+            <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-cadastro-questionarios" aria-expanded="false">
+              <%= fa_icon "file" %> Cadastro de Questionário <i class="fa fa-angle-down arrow"></i>
+            </span>
+            <ul class="collapse collapsed" id="collapse-menu-cadastro-questionarios">
+              <% if can? :read, Question %><li><%= link_to admin_questions_path do %><em class="fa fa-caret-right"></em> <span>Questões</span><% end %></li><% end %>
+              <% if can? :read, Questionnaire %><li><%= link_to admin_questionnaires_path do %><em class="fa fa-caret-right"></em> <span>Questionários</span><% end %></li><% end %>
+              <% if can? :read, Dimension %><li><%= link_to admin_dimensions_path do %><em class="fa fa-caret-right"></em> <span>Dimensões</span><% end %></li><% end %>
+            </ul>
+          </li>
+        <% end %>
+        <% if can?(:read, QuestionnairePeriod) || can?(:manage, :report) %>
+          <li class="nav-heading">
+            <span data-bs-toggle="collapse" data-bs-target="#collapse-q-period-application" aria-expanded="false">
+              <%= fa_icon "calendar" %> Periodo de Aplicação  <i class="fa fa-angle-down arrow"></i>
+            </span>
+            <ul class="collapse collapsed" id="collapse-q-period-application">
+              <% if can? :read, QuestionnairePeriod %><li><%= link_to admin_questionnaire_periods_path do %><em class="fa fa-caret-right"></em> <span>Períodos</span><% end %></li><% end %>
+            </ul>
+          </li>
+          <li class="nav-heading">
+            <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-relatorios" aria-expanded="false">
+              <%= fa_icon "bar-chart" %> Relatórios <i class="fa fa-angle-down arrow"></i>
+            </span>
+            <ul class="collapse collapsed" id="collapse-menu-relatorios">
+              <% if can? :read, :report %><li><%= link_to admin_reports_path do %><em class="fa fa-caret-right"></em> <span>Relatórios</span><% end %></li><% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+</aside>

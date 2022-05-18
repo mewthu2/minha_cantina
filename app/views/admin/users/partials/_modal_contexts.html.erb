@@ -1,0 +1,47 @@
+<div class="modal fade" id="contexts-modal" tabindex="-1" role="dialog" aria-labelledby="contexts-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h4 class="modal-title" id="contexts-modal-label">Lista de Contextos</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true"></span></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-12">
+        <% if new_contexts_for_the_user.present? %>
+      <%= label_tag :context_id, 'Contexto:', class: 'required' %>
+      <%= select_tag :context_id, options_from_collection_for_select(new_contexts_for_the_user, :id, :description, params[:context_id]) ,multiple: false, include_blank: false, class: 'form-control chosen-select'%>
+       </div>
+      <% else %>
+      <div class="alert alert-warning">
+    Todos os contextos disponíveis foram atribuídos para este usuário.
+      </div>
+      <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" class="close" data-bs-dismiss="modal">Fechar</button>
+         <% if new_contexts_for_the_user.present? %> <%= button_tag method: :post, data: {url: admin_user_add_user_context_path}, type: 'button', id: 'btn-adicionar-contexto', class: 'btn btn-primary', remote: true do %> Adicionar contexto<% end %><% end %>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<script type="text/javascript">
+
+  $("#btn-adicionar-contexto").click(function(event) {
+      $("#btn-adicionar-contexto").attr("disabled", true);
+      usuario = ("<%= user.id %>");
+      $.ajax({
+        url: $(this).data('url'),
+        data: { context_id: $('select[name*=context_id]').val(), 
+          }})
+          .always(function(response){
+            confirm('Tem certeza que deseja adicionar os contexto(s) selecionado(s)?')
+          }).fail(function(response){
+              alert("Erro");
+          }).done(function(event) {
+            $("#contexts-modal").modal("hide");
+          })
+          });
+</script>

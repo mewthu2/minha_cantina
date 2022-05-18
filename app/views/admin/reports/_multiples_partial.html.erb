@@ -1,0 +1,70 @@
+<% if question.kind == 'multiple' %>
+  <table class="table mb0">
+    <tbody>
+      <% question.question_alternatives.each do |qa| %>
+        <tr>
+          <td>
+            <%= qa.description %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= qa.decorate.percentage_multiple(@questionnaire_period.id, true, course) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% elsif question.kind == 'multiple_yes_or_not' %>
+  <ul style="list-style: none;">
+    <% question.question_alternatives.each do |qa| %>
+      <li>
+        <div style="">
+          <p style="text-align: justify;font-size: 15pt;">
+            <%= qa.description %>
+          </p>
+        </div>
+        <table class="table mb0">
+          <tbody>
+            <% I18n.t('views.questionnaire_replies.two_options').each do |k, v| %>
+              <tr>
+                <td>
+                  <%= v %>
+                </td>
+                <td>
+                  <%= qa.decorate.percentage_multiple(@questionnaire_period.id, k.to_s, course) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </li>
+    <% end %>
+  </ul>
+<% elsif question.kind == 'multiple_tree' %>
+  <ul style="list-style: none;">
+    <% question.question_alternatives.each do |qa| %>
+      <li>
+        <div style="">
+          <p style="text-align: justify;font-size: 15pt;">
+            <%= qa.description %>
+          </p>
+        </div>
+        <table class="table mb0">
+          <tbody>
+            <% I18n.t('views.questionnaire_replies.tree_options').each do |k, v| %>
+              <tr>
+                <td style="width: 40px;">
+                  <%= v %>
+                </td>
+                <td>
+                  <%= qa.decorate.percentage_multiple(@questionnaire_period.id, k, course) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

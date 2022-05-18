@@ -1,0 +1,52 @@
+<% if question.kind == 'only_one' %>
+  <table class="table mb0">
+    <tbody>
+      <% question.question_alternatives.each do |qa| %>
+        <tr>
+          <td>
+            <%= qa.description %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= qa.decorate.percentage_single(@questionnaire_period.id, qa.id, course) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% elsif question.kind == 'text' %>
+  <table class="table mb0">
+    <tbody>
+      <%= question.decorate.text_answers(@questionnaire_period, course).html_safe %>
+    </tbody>
+  </table>
+<% elsif question.kind == 'note_ten' %>
+
+  <ul style="list-style: none;">
+    <% question.question_alternatives.each do |qa| %>
+      <li>
+        <div style="">
+          <p style="text-align: justify;font-size: 15pt;">
+            <%= qa.description %>
+          </p>
+        </div>
+        <table class="table mb0">
+          <tbody>
+            <% (0..10).each do |i| %>
+              <tr>
+                <td>
+                  <%= i %>
+                </td>
+                <td>
+                  <%= qa.decorate.percentage_single(@questionnaire_period.id, i, course) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </li>
+    <% end %>
+  </ul>
+
+<% end %>

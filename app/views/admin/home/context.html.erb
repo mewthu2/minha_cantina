@@ -1,0 +1,19 @@
+<%= render 'admin/layouts/partials/messages' %>
+
+<% title t('views.home.context.title')%>
+
+<%= form_for(@current_user, url: admin_context_path, html: { autocomplete: 'off' }) do |form| %>
+  <div class="card">
+    <div class="card-header">
+      <%= t('views.home.context.user_context') %>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <%= form.select :context_id, options_from_collection_for_select(current_user.contexts, :id, :description, form.object.context_id), { include_blank: true }, class: 'form-control chosen-select' %>
+      </div>
+    </div>
+    <div class="card-footer text-center">
+      <%= form.button class: 'btn btn-primary', url: admin_context_path do %> <i class="fa fa-check"></i> <%= t('views.buttons.save') %><% end %>
+    </div>
+  </div>
+<% end -%>

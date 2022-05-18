@@ -1,0 +1,11 @@
+<div class="page-header">
+    <h4><%= t('views.users.form.contexts')%>
+      <small class="text-muted" > <%= t('views.users.form.for_user') %>
+        <%= link_to admin_user_modal_context_path(@user.id), id: 'btn-modal-context', class: 'btn btn-labeled btn-primary', remote: true do %> 
+          <span class="btn-label"><i class="fa fa-plus"></i></span> <%= t('views.buttons.add_context')%><% end %></small>
+    </h4> 
+</div>
+  <div class="card" id="tab-contexts">
+    <%= render partial: 'admin/users/partials/tab_contexts', locals: { user: user} %>
+  </div>
+<div id='div-modal'></div>

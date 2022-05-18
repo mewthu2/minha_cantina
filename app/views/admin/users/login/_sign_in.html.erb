@@ -1,0 +1,30 @@
+<h4>Login - Administrativo </h4>
+
+<%= render 'admin/layouts/partials/messages' %>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="col-md-4 form-group">
+    <%= f.email_field :email, placeholder: :email, autofocus: true, class: 'form-control' %>
+  </div>
+  <div class="col-md-4 form-group">
+    <%= f.password_field :password, autocomplete: 'off', placeholder: :password, class: 'form-control' %>
+  </div>
+  <div class="col-md-4 form-group">
+    <%= f.submit 'Entrar', class: 'btn btn-primary btn-lg btn-block' %>
+  </div>
+  <div class="row justify-content-md-center">
+  	<div class="col col-lg-2">
+    	<%= f.check_box :remember_me, class: 'inline mr-sm' %>
+    	<%= f.label :remember_me, class: 'inline' do %>Manter conectado<% end %>
+  	</div>
+<% end %>
+		<div class="col-md-auto">
+			<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  			  <%= link_to new_user_password_path, method: :get, class: 'btn btn-light' do %>
+            <i class = "font-10" id="btn-forgot-login" style="cursor: pointer;"></i> Esqueci minha senha <% end %>
+				<% end %>
+		</div>
+	</div>
+
+	<%= render 'admin/users/login/cookie_consent' %>
+

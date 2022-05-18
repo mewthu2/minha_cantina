@@ -1,0 +1,103 @@
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+      <div class="card-header text-center">Respondidos</div>
+      <div class="card-body">
+        <p class="card-text text-center" style="font-size: 45px;"><%= @questionnaire_period.decorate.replied %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+      <div class="card-header text-center">Não respondedios</div>
+      <div class="card-body">
+        <p class="card-text text-center" style="font-size: 45px;"><%= @questionnaire_period.decorate.not_replied %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+      <div class="card-header text-center">TOTAL</div>
+      <div class="card-body">
+        <p class="card-text text-center" style="font-size: 45px;"><%= @questionnaire_period.decorate.total %></p>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="page-header">
+  <h4>Detalhe das questões<small class="text-muted"> detalhes das questões</small></h4>
+</div>
+
+<div class="row">
+  <% if params[:course].present? %>
+    <div class="col-6">
+      <div class="page-header">
+        <h4><%= params[:course] %><small class="text-muted"> Dados por curso</small></h4>
+      </div>
+      <% @questionnaire_period.questionnaire.questions.each.with_index(1) do |question, i| %>
+        <div class='panel-clean'>
+          <div style="">
+            <p style="text-align: justify;font-size: 15pt;">
+              [<%= i %>] - <%= question.enounce %>
+            </p>
+          </div>
+
+          <%= render partial: 'multiples_partial', locals: { question: question, course: params[:course] } %>
+          <%= render partial: 'single_partial', locals: { question: question, course: params[:course] } %>
+
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="col-<%= params[:course].present? ? 6 : 12 %>">
+    <div class="page-header">
+      <h4>Geral<small class="text-muted"> detalhes das questões</small></h4>
+    </div>
+    <% @questionnaire_period.questionnaire.questions.each.with_index(1) do |question, i| %>
+      <div class='panel-clean'>
+        <div style="">
+          <p style="text-align: justify;font-size: 15pt;">
+            [<%= i %>] - <%= question.enounce %>
+          </p>
+        </div>
+
+        <%= render partial: 'multiples_partial', locals: { question: question, course: nil } %>
+        <%= render partial: 'single_partial', locals: { question: question, course: params[:course] } %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="page-header">
+  <h4>DETALHE POR TURMA<small class="text-muted"> detalhes por turma</small></h4>
+</div>
+
+<table class="table mb0 table-bordered">
+  <thead>
+    <tr>
+      <td> Tumra</td>
+      <td>Respondido</td>
+      <td>Total</td>
+      <td>%</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @school_classes.each do |school_class| %>
+      <tr>
+        <td><%= school_class.school_class %></td>
+        <td><%= school_class.replied_by_class %></td>
+        <td><%= school_class.total_by_class.size %></td>
+        <td><%= school_class.percentage_by_class %></td>
+        <td width="108">
+          <%= button_tag class: 'btn btn-primary' do %>
+            <i class="fa fa-eye"></i> Detalhes
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,30 @@
+<div class="alert" role="alert" style="display: none;" id="alert">
+  <button type="button" class="btn-close" onclick="$(this).parent().fadeOut();"></button>
+  <span></span>
+</div>
+<% if defined?(object) && object && object.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <ul>
+      <% object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <% flash.each do |name, msg| %>
+    <% if msg.is_a?(String) %>
+      <div class="alert alert-<%= name.to_s == 'notice' ? 'success' : 'danger' %>">
+        <%= content_tag :div, msg.html_safe, :id => "flash_#{name}" %>
+      </div>
+    <% elsif msg.is_a?(Array) && msg.any? %>
+      <div class="alert alert-danger">
+        <ul>
+          <% msg.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <% flash.discard(name) %>
+  <% end %>
+<% end %>

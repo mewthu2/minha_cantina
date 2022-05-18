@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="<%= locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="turbolinks-cache-control" content="no-cache">
+    <title><%= content_for?(:title) ? "#{yield(:title)} - CPA - Claretiano" : 'CPA - Claretiano - Rede de Educação' %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'admin', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= yield :stylesheets %>
+
+    <%= javascript_include_tag 'admin', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'admin/select_fields/style', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'replies/index', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129898101-4%22%3E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-129898101-4');
+    </script>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body class="<%= controller_path.gsub('admin', '').parameterize.gsub('_', '-') %>">
+    <div class="wrapper">
+      <header class="navbar-header">
+        <div class="navbar-brand">
+          <div class="brand-logo">
+            <%= image_tag 'admin/claretiano-189x43' %>
+          </div>
+        </div>
+        <div class="navbar-content">
+          <%= yield :title %>
+        </div>
+        <div class="navbar-dropdowns">
+          <nav class="navbar navbar-expand-sm">
+            <div class="collapse navbar-collapse">
+              <ul class="navbar-nav">
+                <li class="nav-item user-notifications bg-blue2">
+                  <%= link_to '#', class: 'nav-link dropdown-toggle', 'data-bs-toggle' => 'dropdown' do %>
+                    <em class="fa fa-ticket notificacao-icon mr-sm"></em> Tickets
+                  <% end %>
+                  <div class="dropdown-menu">
+                    <%= link_to 'https://claretiano.freshservice.com/support/tickets', class: 'dropdown-item', target: '_blank' do %>
+                      <em class="fa fa-user mr-sm"></em> Meus tickets
+                    <% end %>
+                    <%= link_to 'https://claretiano.freshservice.com/support/tickets/new', class: 'dropdown-item', target: '_blank' do %>
+                      <em class="fa fa-plus mr-sm"></em> Abrir ticket
+                    <% end %>
+                    <%= link_to 'https://claretiano.freshservice.com/support/home', class: 'dropdown-item', target: '_blank' do %>
+                      <em class="fa fa-laptop mr-sm"></em> Central de Serviços
+                    <% end %>
+                  </div>
+                </li>
+                <li class="nav-item dropdown user-settings">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-info">
+                      <p class="user-name">
+                        <%= current_user.name %>
+                      </p>
+                      <p class="user-context">
+                        <%= current_user.context&.description || 'Contexto não selecionado' %>
+                      </p>
+                    </div>
+                    <div class="user-photo">
+                      <%= image_tag 'admin/usuario-200x200.png', alt: current_user.name, title: current_user.name %>
+                    </div>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" id="dropdown-user" style="width: 400px">
+                    <div class="dropdown-item">
+                      <div class="row">
+                        <div class="col-4 pr0">
+                          <div class="user-photo">
+                            <%= image_tag 'admin/usuario-200x200.png', alt: current_user.name, title: current_user.name %>
+                          </div>
+                        </div>
+                        <div class="col-8 pl0">
+                          <div class="user-info">
+                            <p><strong><%= current_user.name %></strong></p>
+                            <p><small><%= current_user.login %> - <%= current_user.email %></small></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to admin_my_contexts_path(location: request.path), class: 'dropdown-item', remote: true do %>Alterar contexto de trabalho<% end %>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to destroy_user_session_path, class: 'dropdown-item', method: :delete do %>Sair<% end %>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <aside class="left-menu">
+        <div class="aside-inner">
+          <nav class="sidebar">
+            <div class="sidebar-search">
+              <%= form_tag 'javascript:void(0)', method: 'get', id: 'form-sidebar-search' do%>
+                <div class="input-group search">
+                  <div class="input-group-prepend">
+                    <%= button_tag class: 'btn btn-primary' do %><i class="fa fa-search"></i><% end %>
+                  </div>
+                  <%= text_field_tag :search_menu_item, '', class: 'form-control', placeholder: 'Pesquisar', autocomplete: 'off' %>
+                </div>
+              <% end %>
+            </div>
+            <ul class="nav" id="left-menu-accordion">
+              <li class="nav-heading">
+                <%= link_to admin_root_path do %><%= fa_icon "tachometer" %> Dashboard <% end %>
+              </li> 
+              <% if can?(:read, User) %>
+                <li class="nav-heading">
+                  <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-administracao" aria-expanded="false">
+                    <%= fa_icon "gear" %> Administração <i class="fa fa-angle-down arrow"></i>
+                  </span>
+                  <ul class="collapse collapsed" id="collapse-menu-administracao">
+                    <% if can? :read, User %><li><%= link_to admin_users_path do %><em class="fa fa-caret-right"></em> <span>Usuários</span><% end %></li><% end %>
+                  </ul>
+                </li>
+              <% end %>
+              <% if can?(:read, Question) || can?(:read, Questionnaire) || can?(:read, Dimension) %>
+                <li class="nav-heading">
+                  <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-cadastro-questionarios" aria-expanded="false">
+                    <%= fa_icon "file" %> Cadastro de Questionário <i class="fa fa-angle-down arrow"></i>
+                  </span>
+                  <ul class="collapse collapsed" id="collapse-menu-cadastro-questionarios">
+                    <% if can? :read, Question %><li><%= link_to admin_questions_path do %><em class="fa fa-caret-right"></em> <span>Questões</span><% end %></li><% end %>
+                    <% if can? :read, Questionnaire %><li><%= link_to admin_questionnaires_path do %><em class="fa fa-caret-right"></em> <span>Questionários</span><% end %></li><% end %>
+                    <% if can? :read, Dimension %><li><%= link_to admin_dimensions_path do %><em class="fa fa-caret-right"></em> <span>Dimensões</span><% end %></li><% end %>
+                  </ul>
+                </li>
+              <% end %>
+              <% if can?(:read, QuestionnairePeriod) || can?(:manage, :report) %>
+                <li class="nav-heading">
+                  <span data-bs-toggle="collapse" data-bs-target="#collapse-q-period-application" aria-expanded="false">
+                    <%= fa_icon "calendar" %> Periodo de Aplicação  <i class="fa fa-angle-down arrow"></i>
+                  </span>
+                  <ul class="collapse collapsed" id="collapse-q-period-application">
+                    <% if can? :read, QuestionnairePeriod %><li><%= link_to admin_questionnaire_periods_path do %><em class="fa fa-caret-right"></em> <span>Períodos</span><% end %></li><% end %>
+                  </ul>
+                </li>
+                <li class="nav-heading">
+                  <span data-bs-toggle="collapse" data-bs-target="#collapse-menu-relatorios" aria-expanded="false">
+                    <%= fa_icon "bar-chart" %> Relatórios <i class="fa fa-angle-down arrow"></i>
+                  </span>
+                  <ul class="collapse collapsed" id="collapse-menu-relatorios">
+                    <% if can? :read, :report %><li><%= link_to admin_reports_path do %><em class="fa fa-caret-right"></em> <span>Relatórios</span><% end %></li><% end %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <section>
+        <div class="content-wrapper" >
+          <%= yield %>
+        </div>
+      </section>
+
+      <div id="modal-holder"></div>
+
+      <div class="app-loading">
+        <div style="display: block"></div>
+      </div>
+
+    </div>
+    <%= yield :javascripts %>
+  </body>
+</html>

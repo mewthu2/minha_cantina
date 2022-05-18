@@ -1,0 +1,9 @@
+$('#courses').html('<%= j render partial: 'courses_partial', locals: { courses: @courses } %>');
+$("#course_id").chosen({
+  no_results_text: "Nenhum resultado sobre",
+  multiple_text: "",
+  placeholder_text_single: " ",
+  allow_single_deselect: true,
+  search_contains: true,
+  width: "100%"
+});

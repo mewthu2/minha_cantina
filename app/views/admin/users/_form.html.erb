@@ -1,0 +1,44 @@
+<%= render 'admin/layouts/partials/messages', object: user %>
+<div class="alert alert-warning">
+  <strong><%= t('views.responses.attention')%></strong> <%= t('views.responses.attention_message')%>
+</div>
+
+<%= form_for([:admin, user], html: { autocomplete: 'off' }) do |form| %>
+  <ul class="nav nav-tabs" id="user-tab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="true">
+        <%= I18n.t 'views.users.form.data' %>
+      </a>
+    </li>
+    <% if user.persisted? %>
+      <li class="nav-item">
+        <a class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#contexts" type="button" role="tab" aria-controls="contexts" aria-selected="true">
+          <%= I18n.t 'views.users.form.contexts' %>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#poles" type="button" role="tab" aria-controls="poles" aria-selected="true">
+          <%= I18n.t 'views.users.form.poles' %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+  <div class="tab-content" id="user-tab-content">
+    <div class="tab-pane show active" id="data" role="tabpanel" aria-labelledby="data-tab">
+      <%= render partial: 'admin/users/partials/data', locals: { user: user,  form: form } %>
+    </div>
+    <% if user.persisted? %>
+      <div class="tab-pane" id="contexts" role="tabpanel" aria-labelledby="contexts-tab">
+        <%= render partial: 'admin/users/partials/contexts', locals: { user: user,  form: form } %>
+      </div>
+      <div class="tab-pane" id="poles" role="tabpanel" aria-labelledby="poles-tab">
+        <%= render partial: 'admin/users/partials/poles', locals: { user: user,  form: form } %>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-buttons">
+    <%= link_to admin_users_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> <%= t('views.buttons.back') %><% end %>
+    <% unless read_only %><%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: t('views.buttons.saving') } do %><i class="fa fa-check"></i> <%= t('views.buttons.save') %><% end %><% end %>
+  </div>
+
+<% end %>
